@@ -1,0 +1,44 @@
+3.6 Hardware Implementation
+3.6.1 Component Procurement
+Components were selected based on simulation and circuit design requirements:
+ESP32 development board
+LM358 operational amplifier
+Passive components (resistors, capacitors)
+Piezoelectric and resistive sensors
+Each component was verified against required electrical characteristics.
+3.6.2	Circuit Assembly
+The circuit assembly process involved translating the designed signal conditioning circuits into a physical prototype using standard electronic prototyping techniques. The system was assembled in two main sections: the gastric signal acquisition circuit and the respiratory signal acquisition circuit, both interfaced to the ESP32 microcontroller.
+a) Prototyping Platform
+The circuit was initially implemented on a breadboard to allow flexibility in testing and modification. Components were arranged to minimize noise and signal interference by:
+•	Keeping analog signal paths short 
+•	Separating power and signal lines 
+•	Ensuring proper grounding across all modules 
+b) Gastric Signal Circuit Assembly
+The gastric sensing unit was constructed as follows:
+•	The piezoelectric sensor was connected as a high-impedance signal source 
+•	A parallel resistor (1 MΩ) was used to stabilize the signal 
+•	A coupling capacitor (100 nF) removed DC offset 
+•	The signal was biased to 1.65 V (virtual ground) using a voltage divider 
+•	The conditioned signal was fed into an LM358 non-inverting amplifier 
+•	A low-pass RC filter was implemented to remove high-frequency noise 
+•	The final output was connected to ESP32 ADC pin (GPIO34) 
+This configuration ensured proper amplification of weak gastric signals while maintaining signal integrity.
+c) Respiratory Signal Circuit Assembly
+The respiratory sensing unit was implemented using:
+•	A resistive sensor configured as a voltage divider 
+•	Output voltage varying with chest expansion 
+•	A filter capacitor (100 nF) to smooth fluctuations 
+•	An LM358 amplifier stage to increase signal amplitude 
+•	A low-pass filter to isolate low-frequency respiratory signals 
+The output was connected to ESP32 ADC pin (GPIO35).
+d) Power Supply Configuration
+•	The ESP32 was powered via USB (5V input) 
+•	A regulated 3.3V output was used for sensor interfacing 
+•	The LM358 op-amp was powered using a dual supply configuration (0–5V) 
+•	A virtual ground (1.65 V) was generated for signal biasing 
+e) System Integration
+After assembling individual modules:
+•	Both signal channels were connected to the ESP32 
+•	Proper grounding was verified 
+•	Continuity and voltage checks were performed using a multimeter 
+•	Signal outputs were validated using serial monitoring before web transmission 

@@ -1,0 +1,13 @@
+3.2.1 Initial Architecture: Arduino + Wi-Fi Module
+The initial implementation utilized an Arduino microcontroller coupled with an external Wi-Fi module. This configuration enabled basic data acquisition and wireless transmission; however, several limitations were identified:
+1.	Serial communication overhead between Arduino and WiFi module introduced latency
+2.	Increased power consumption due to multiple active modules
+3.	Additional hardware complexity and wiring requirements
+4.	Limited computational capability for real-time signal processing
+3.2.2 Transition to ESP32
+To address these limitations, the system was redesigned using the ESP32 microcontroller, which integrates:
+1.	Dual-core processor for parallel task execution
+2.	Built-in WiFi and Bluetooth communication
+3.	12-bit ADC channels for high-resolution signal acquisition
+4.	Lower power consumption and reduced hardware footprint
+The ESP32 directly interfaces with analog signals via GPIO34 and GPIO35, enabling simultaneous acquisition of gastric and respiratory signals. The integration eliminates the need for external communication modules and reduces system latency, thereby improving real-time performance and reliability.

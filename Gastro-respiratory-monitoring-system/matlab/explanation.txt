@@ -1,0 +1,36 @@
+3.3 Signal Modeling and Simulation
+Signal modeling was conducted in MATLAB to replicate realistic gastro-respiratory signals under controlled conditions. The uploaded MATLAB script was used to generate synthetic signals, introduce noise, and evaluate filtering strategies.
+3.3.1 Sampling Configuration
+The simulation employed a sampling frequency of 2000 Hz over a 20-second duration, ensuring adequate temporal resolution for both high-frequency gastric signals and low-frequency respiratory signals.
+3.3.2 Gastrointestinal Signal Modeling
+The gastrointestinal signal was modeled as a high-frequency, bursty waveform representing bowel sounds. Key characteristics included:
+1.	Frequency components: 300 Hz and 600 Hz sinusoidal signals
+2.	Noise component: Gaussian noise with amplitude scaling
+3.	Random bursts to simulate transient gastric activity
+The model incorporated stochastic bursts using threshold-based random functions, producing realistic irregular patterns observed in physiological gastric signals.
+3.3.3 Respiratory Signal Modeling
+The respiratory signal was modeled as a low-frequency sinusoidal waveform representing breathing cycles:
+1.	Frequency: approximately 0.25 Hz
+2.	Amplitude: scaled to reflect chest expansion signals
+3.	Noise: low-amplitude Gaussian noise
+This distinction between high-frequency gastric signals and low-frequency respiratory signals informed the design of independent filtering pathways.
+3.3.4 Filter Design in MATLAB
+Digital filters were designed using MATLAB’s designfilt function:
+Gastrointestinal Band pass Filter:
+Frequency range: 100–900 Hz
+Filter order: 4
+Respiratory Low-Pass Filter:
+Cutoff frequency: 2 Hz
+Filter order: 4
+These filters were applied using zero-phase filtering to eliminate phase distortion.
+3.3.5 ADC Simulation
+To emulate embedded acquisition:
+Signals were normalized to 0–5V range
+Quantized using a 10-bit ADC model (0–1023 levels)
+This step ensured compatibility between simulated signals and microcontroller input constraints.
+3.3.6 Frequency Analysis
+Fast Fourier Transform (FFT) analysis was performed to:
+Verify dominant frequency components
+Confirm filter effectiveness
+Identify noise distribution
+Simulation results guided the selection of analog filter cutoff frequencies and validated signal separability.

@@ -1,0 +1,110 @@
+3.5 Algorithm Development and Validation
+3.5.1 Algorithm: MATLAB Simulation of Gastro-Respiratory Signals
+3.5.1.1 Step 1: Initialize System Parameters
+	Define sampling frequency fs = 2000 Hz 
+	Define time duration (20 seconds) 
+	Generate time vector t
+3.5.1.2 Step 2: Generate Gastrointestinal Signal
+	Generate base sinusoidal components: 
+	Combine multiple frequencies (300 Hz and 600 Hz) 
+	Add Gaussian noise to simulate biological interference 
+	Introduce random bursts: 
+	Use random trigger condition 
+	Superimpose high-amplitude short-duration signals 
+	Output: Noisy, bursty gastric signal 
+3.5.1.3 Step 3: Generate Respiratory Signal
+	Generate low-frequency sinusoidal waveform (~0.25 Hz) 
+	Add small random noise 
+	Output: Respiratory signal representing breathing cycles
+3.5.1.4 Step 4: Design Filters
+	Design band pass filter for gastric signal: 
+	Pass band: 100–900 Hz 
+	Design low-pass filter for respiratory signal: 
+	Cutoff frequency: 2 Hz 
+3.5.1.5 Step 5: Apply Filtering
+	Apply band pass filter to gastric signal 
+	Apply low-pass filter to respiratory signal 
+	Output: Cleaned physiological signals
+3.5.1.6 Step 6: Normalize Signals (Analog Conditioning Simulation)
+	Shift signals to eliminate negative values 
+	Scale signals to 0–5V range 
+	Output: Signals compatible with microcontroller ADC 
+3.5.1.7 Step 7: Simulate ADC Conversion
+	Define ADC resolution (10-bit → 1023 levels) 
+	Convert normalized signals into digital values 
+	Output: Discrete ADC signals 
+3.5.1.8 Step 8: Visualization
+Plot: 
+	Raw vs filtered gastric signal 
+	Raw vs filtered respiratory signal 
+	ADC outputs 
+3.5.1.9 Step 9: Frequency Analysis
+	Perform FFT on gastric signal 
+	Plot frequency spectrum 
+	Verify dominant frequency components
+3.5.2 Algorithm: ESP32-Based Gastro–Respiratory Correlation System
+3.5.2.1 Step 1: System Initialization
+	Configure ADC inputs: 
+	Gastric signal → GPIO34 
+	Respiratory signal → GPIO35 
+	Set sampling rate (e.g., 200–500 Hz) 
+	Initialize buffers for both signals (sliding window, e.g., 10–20 s) 
+	Initialize web server (ESP32 Wi-Fi) 
+3.5.2.2 Step 2: Signal Acquisition
+	Continuously sample both channels 
+	Store incoming samples in circular buffers: 
+	G[n] → gastric 
+	R[n] → respiratory 
+3.5.2.3 Step 3: Preprocessing (Minimal, since analog filtering exists)
+	Remove DC offset: 
+	G[n] = G[n] - mean(G_window) 
+	R[n] = R[n] - mean(R_window) 
+	Normalize signals (optional scaling) 
+3.5.2.4 Step 4: Feature Extraction
+3.5.2.4.1 Gastric Activity Index (GAI)
+	Compute signal energy over window: 
+	GAI=∑G[n]2 
+	Detect bursts: 
+	If amplitude > threshold → mark event 
+3.5.2.4.2 Respiratory Stress Index (RSI)
+	Detect peaks (breathing cycles) 
+	Compute: 
+	Respiratory rate (RR) 
+	Variability (irregular breathing) 
+	Define stress indicator: 
+	High RR or irregular spacing → ↑ RSI 
+3.5.2.5 Step 5: Correlation Analysis (Core of Project)
+Use time-windowed correlation:
+r=(∑▒〖(G[n]-G ̅ 〗)(R[n]-R ̅))/√(〖∑(G[n]-G ̅)〗^2 〖∑(R[n]-R ̅)〗^2 )
+The correlation is computed over a sliding time window to capture temporal variations in the relationship between gastrointestinal activity and respiratory response.
+Procedure:
+	A synchronized time window of gastric signal G[n] and respiratory signal R[n] is acquired. 
+	The mean values G ̅and R ̅are computed for the selected window. 
+	Each signal is centered by subtracting its mean to remove DC offset. 
+	The numerator is obtained as the sum of the product of deviations between the two signals. 
+	The denominator is computed as the product of the standard deviations of both signals. 
+	The correlation coefficient r is then calculated.
+Interpret: 
+	r ≈ +1 → strong positive relationship 
+	r ≈ 0 → no relationship 
+	r < 0 → inverse relationship 
+3.5.2.6 Step 6: Event-Based Correlation
+	When gastric burst detected: 
+	Check respiratory change within short delay (e.g., 2–5 s) 
+	If respiratory disturbance follows: 
+	Mark as linked event
+3.5.2.7 Step 7: Data Packaging for Dashboard
+Prepare three datasets:
+	Gastric signal → G[n] 
+	Respiratory signal → R[n] 
+	Correlation signal: 
+	Rolling r(t) or event markers 
+3.5.2.8 Step 8: Web Dashboard (ESP32 Server)
+	Serve webpage from ESP32 
+	Display: 
+	Graph 1: Gastric signal 
+	Graph 2: Respiratory signal 
+	Graph 3: Correlation / overlay 
+	Show simple interpretation: 
+	“Correlation: Strong / Moderate / Weak” 
+	“Events linked: Yes / No”
